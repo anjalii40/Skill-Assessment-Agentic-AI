@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Skill Assessor
 
-## Getting Started
+A modern full-stack Next.js app that turns resume claims into a structured technical screening flow.
 
-First, run the development server:
+Upload a resume, paste a job description, extract skill overlap with Gemini, run a focused interview, score answers, and generate a targeted learning plan from the results.
+
+## Highlights
+
+- Resume upload and PDF text extraction
+- Job description skill extraction and gap analysis
+- AI-generated interview questions based on overlapping skills
+- Answer evaluation with bluff detection
+- Readiness scoring with a visual results dashboard
+- Personalized learning plan generation
+- Modern UI built with Tailwind CSS and shadcn/ui
+
+## Demo Flow
+
+1. Upload a candidate resume as PDF
+2. Paste the target job description
+3. Extract resume skills, JD skills, gaps, and overlap
+4. Interview the candidate on up to 3 overlapping skills
+5. Evaluate each answer for depth and credibility
+6. Generate a final readiness score and learning path
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- Gemini API via Google AI Studio
+- OpenAI-compatible SDK client
+- `pdf-parse` for PDF extraction
+- Recharts for result visualization
+
+## Product Screens
+
+- Upload screen for resume + JD intake
+- Live interview screen with progress tracking
+- Results screen with radar chart, readiness score, and learning modules
+
+## Project Structure
+
+```text
+src/
+  app/
+    api/
+      parse/       # resume parsing + skill extraction
+      interview/   # question generation
+      evaluate/    # answer scoring
+      result/      # readiness + learning plan
+    page.tsx       # main UI flow
+    globals.css    # visual system
+  components/
+    ui/            # shadcn/ui primitives
+  lib/
+    ai.ts          # Gemini/OpenAI-compatible client config
+    prompts.ts     # prompts + JSON schemas
+```
+
+## Local Setup
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+Create `.env.local`:
+
+```bash
+GEMINI_API_KEY=your_google_ai_studio_key
+```
+
+Optional overrides:
+
+```bash
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+GEMINI_FAST_MODEL=gemini-3-flash-preview
+GEMINI_SMART_MODEL=gemini-3-flash-preview
+```
+
+## Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App URL:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+http://localhost:8000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Validation
 
-## Learn More
+```bash
+npm run lint
+npx next build --webpack
+```
 
-To learn more about Next.js, take a look at the following resources:
+## API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `POST /api/parse`
+  Accepts `FormData` with resume PDF and job description, extracts text from the PDF, and returns skill overlap/gaps.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /api/interview`
+  Generates a targeted technical question for a selected skill.
 
-## Deploy on Vercel
+- `POST /api/evaluate`
+  Scores the candidate answer and flags likely bluffing.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `POST /api/result`
+  Produces a final readiness score and a tailored learning plan.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Why This Project
+
+Most screening flows reward keyword stuffing. This project is built to validate practical skill depth instead of just matching buzzwords on a resume.
+
+## Notes
+
+- The app is currently configured for Gemini-first usage.
+- The AI client supports an OpenAI-compatible interface, but Gemini is the default provider in this repo.
+- The dev server runs on port `8000`.
