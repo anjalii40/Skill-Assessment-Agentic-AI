@@ -41,6 +41,70 @@ Upload a resume, paste a job description, extract skill overlap with Gemini, run
 - Live interview screen with progress tracking
 - Results screen with radar chart, readiness score, and learning modules
 
+## Wireframes
+
+### Upload + Parse
+
+```mermaid
+flowchart TB
+  page["Upload Screen"]
+  header["Header / Product Intro"]
+  hero["Hero Copy / Assessment Summary"]
+  upload["Resume Upload Card"]
+  jd["Job Description Input"]
+  cta["Start Assessment CTA"]
+  status["Error / Validation State"]
+
+  page --> header
+  page --> hero
+  page --> upload
+  page --> jd
+  page --> cta
+  page --> status
+```
+
+### Interview Flow
+
+```mermaid
+flowchart LR
+  shell["Interview Screen"]
+  progress["Progress Banner"]
+  context["Assessment Context Panel"]
+  overlap["Overlap Skills"]
+  gaps["Target Gaps"]
+  chat["Live Interview Panel"]
+  prompt["AI Question"]
+  answer["Candidate Answer"]
+  score["Evaluation Loop"]
+
+  shell --> progress
+  shell --> context
+  shell --> chat
+  context --> overlap
+  context --> gaps
+  chat --> prompt
+  chat --> answer
+  answer --> score
+```
+
+### Results Dashboard
+
+```mermaid
+flowchart TB
+  results["Results Screen"]
+  readiness["Readiness Score"]
+  radar["Skill Radar Chart"]
+  integrity["Profile Integrity Card"]
+  learning["Learning Plan"]
+  resources["Recommended Resources"]
+
+  results --> readiness
+  results --> radar
+  results --> integrity
+  results --> learning
+  learning --> resources
+```
+
 ## Project Structure
 
 ```text
@@ -58,6 +122,38 @@ src/
   lib/
     ai.ts          # Gemini/OpenAI-compatible client config
     prompts.ts     # prompts + JSON schemas
+```
+
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+  user["User"]
+  ui["Next.js App Router UI"]
+  parse["POST /api/parse"]
+  interview["POST /api/interview"]
+  evaluate["POST /api/evaluate"]
+  result["POST /api/result"]
+  pdf["PDF Parser"]
+  prompts["Prompt + Schema Layer"]
+  ai["Gemini API"]
+
+  user --> ui
+  ui --> parse
+  ui --> interview
+  ui --> evaluate
+  ui --> result
+
+  parse --> pdf
+  parse --> prompts
+  interview --> prompts
+  evaluate --> prompts
+  result --> prompts
+
+  parse --> ai
+  interview --> ai
+  evaluate --> ai
+  result --> ai
 ```
 
 ## Local Setup
