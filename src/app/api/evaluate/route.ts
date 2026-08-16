@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { aiClient, SMART_MODEL } from '@/lib/ai';
-import { Prompts, Schemas } from '@/lib/prompts';
+import { aiClient, SMART_MODEL } from '@/backend/ai';
+import { Prompts, Schemas } from '@/backend/prompts';
+import { safeParseJson } from '@/frontend/utils';
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) {
@@ -28,10 +29,11 @@ export async function POST(req: Request) {
           content: `Question: ${question}\nUser Answer: ${user_answer}\nExpected Concepts: ${expected_key_concepts.join(", ")}`
         }
       ],
-      response_format: Schemas.EvaluatorSchema
+      response_format: Schemas.EvaluatorSchema,
+      max_tokens: 1000
     });
 
-    const result = JSON.parse(completion.choices[0].message.content || '{}');
+    const result = safeParseJson(completion.choices[0].message.content || '{}');
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error("API Evaluate Error:", error);

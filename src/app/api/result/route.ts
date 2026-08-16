@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { aiClient, FAST_MODEL } from '@/lib/ai';
-import { Prompts, Schemas } from '@/lib/prompts';
+import { aiClient, FAST_MODEL } from '@/backend/ai';
+import { Prompts, Schemas } from '@/backend/prompts';
+import { safeParseJson } from '@/frontend/utils';
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) {
@@ -28,10 +29,11 @@ export async function POST(req: Request) {
           content: `Final Skill Scores:\n${JSON.stringify(final_skill_scores, null, 2)}\n\nOriginal JD Skills:\n${jd_skills.join(", ")}`
         }
       ],
-      response_format: Schemas.PlanGeneratorSchema
+      response_format: Schemas.PlanGeneratorSchema,
+      max_tokens: 2500
     });
 
-    const result = JSON.parse(completion.choices[0].message.content || '{}');
+    const result = safeParseJson(completion.choices[0].message.content || '{}');
     return NextResponse.json(result);
   } catch (error: unknown) {
     console.error("API Result Error:", error);
