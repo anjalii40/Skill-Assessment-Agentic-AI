@@ -1,3 +1,11 @@
+/**
+ * 💡 WHAT THIS FILE DOES:
+ * This file acts as our AI's "instruction manual". It contains the detailed templates (prompts)
+ * and structured guidelines that we send to Gemini/OpenAI. These instruct the AI on how to
+ * parse resumes, generate precise questions, score answers, detect candidate bluffing, and format
+ * final reports.
+ */
+
 export const Prompts = {
   // Call 1: Extraction & Gap Analysis
   EXTRACTOR: `You are an expert technical recruiter and resume parser. 
@@ -6,6 +14,11 @@ Normalize the skills (e.g., equate 'React.js' to 'React').
 Extract the skills required by the JD.
 Extract the skills claimed in the Resume.
 Determine the initial gaps (skills in JD but not in Resume) and the overlap (skills in both). 
+
+Link & Insight Extraction Rules:
+1. Scan the resume for all professional web profile links: LeetCode, CodeChef, GitHub, LinkedIn, Kaggle, personal portfolios, and blogs. Extract all found URLs into 'profile_links'.
+2. Provide a 1-paragraph summary in 'profile_insights' highlighting candidate strengths, focus areas (e.g. competitive programming, open source contribution), and project complexity based on the resume and extracted profile links.
+
 Output your analysis STRICTLY conforming to the provided JSON schema.`,
 
   // Call 2: Interview Question Generation
@@ -50,8 +63,10 @@ export const Schemas = {
           jd_skills: { type: "array", items: { type: "string" } },
           initial_gaps: { type: "array", items: { type: "string" } },
           overlap: { type: "array", items: { type: "string" } },
+          profile_links: { type: "array", items: { type: "string" } },
+          profile_insights: { type: "string" },
         },
-        required: ["resume_skills", "jd_skills", "initial_gaps", "overlap"],
+        required: ["resume_skills", "jd_skills", "initial_gaps", "overlap", "profile_links", "profile_insights"],
         additionalProperties: false,
       },
       strict: true,

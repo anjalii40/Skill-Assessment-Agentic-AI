@@ -1,224 +1,131 @@
 # AI Skill Assessor
 
-A modern full-stack Next.js app that turns resume claims into a structured technical screening flow.
+A modern, highly scalable full-stack Next.js app designed to turn resume claims into an automated, conversational technical screening platform using a "Linear-style" Dark Minimalist SaaS theme.
 
-Upload a resume, paste a job description, extract skill overlap with Gemini, run a focused interview, score answers, and generate a targeted learning plan from the results.
+It parses candidate resumes (via lightweight `pdf-parse` JS), extracts professional profile links (LeetCode, GitHub, LinkedIn), conducts **10-minute live voice interviews** (via Gemini Multimodal Live API over WebSockets), flags empty buzzword claims (Bluff Detection), and outputs actionable upskilling modules.
 
-## Highlights
+---
 
-- Resume upload and PDF text extraction
-- Job description skill extraction and gap analysis
-- AI-generated interview questions based on overlapping skills
-- Answer evaluation with bluff detection
-- Readiness scoring with a visual results dashboard
-- Personalized learning plan generation
-- Modern UI built with Tailwind CSS and shadcn/ui
+## 🎨 Unified "Linear-Style" Dark Theme
+- **Background**: Deep black canvas (`#0D0D0D` / `#121212`)
+- **Surfaces & Cards**: Elevated charcoal panels (`#1A1A1A` / `#242424`) with thin low-opacity `1px` borders (`rgba(255, 255, 255, 0.08)`)
+- **Accents**: Light, aesthetic pastel shades of **Mint/Sage Green** for primary actions and **Soft Orange/Peach** for tags and alerts.
 
-## Demo Flow
+---
 
-1. Upload a candidate resume as PDF
-2. Paste the target job description
-3. Extract resume skills, JD skills, gaps, and overlap
-4. Interview the candidate on up to 3 overlapping skills
-5. Evaluate each answer for depth and credibility
-6. Generate a final readiness score and learning path
+## 🚀 Key Highlights & Features
+1. **Multi-Role Shared Link Recruitment**:
+   - **Recruiters** log in via OTP code, define campaign briefs (Company Name, Job Title, JD, Skills, Eligibility), and generate secure shareable candidate links (`/apply/[campaignId]`).
+   - **Candidates** use the links to submit their details, upload their resume, take the voice screen, and view constructive feedback.
+2. **Lightweight In-Memory PDF Parsing**:
+   - Parses PDF resumes instantly using the lightweight, pure-JavaScript `pdf-parse` library in memory (eliminating heavy Python models and subprocesses).
+3. **Conversational Gemini Live WebSockets**:
+   - Establishes a stateful client-to-server connection to Gemini Live (`v1beta`) using raw 16kHz PCM mic input and 24kHz PCM speaker output.
+   - Supports user barge-in (interruption) and silence suppression to save bandwidth and prevent latency lag.
+4. **Professional Profile Link & AI Insights Extraction**:
+   - Automatically extracts LeetCode, CodeChef, GitHub, LinkedIn, and personal portfolio links from resumes.
+   - Generates an AI-driven candidate strengths summary block.
+5. **Anti-Cheat Bluff Detection**:
+   - Flags candidates who write verbose, definitions-only answers but miss the core expected technical concepts.
 
-## Tech Stack
+---
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- shadcn/ui
-- Gemini API via Google AI Studio
-- OpenAI-compatible SDK client
-- `pdf-parse` for PDF extraction
-- Recharts for result visualization
+## 🛠️ Tech Stack
+- **Next.js 16 (App Router)** & **React 19**
+- **Supabase** (Client SDK database connection)
+- **Tailwind CSS v4** & **shadcn/ui**
+- **Gemini Multimodal Live API** (BidiGenerateContent over WebSockets)
+- **OpenRouter** (For serverless REST completions)
 
-## Product Screens
+---
 
-- Upload screen for resume + JD intake
-- Live interview screen with progress tracking
-- Results screen with radar chart, readiness score, and learning modules
-
-## Wireframes
-
-### Upload + Parse
-
-```mermaid
-flowchart TB
-  page["Upload Screen"]
-  header["Header / Product Intro"]
-  hero["Hero Copy / Assessment Summary"]
-  upload["Resume Upload Card"]
-  jd["Job Description Input"]
-  cta["Start Assessment CTA"]
-  status["Error / Validation State"]
-
-  page --> header
-  page --> hero
-  page --> upload
-  page --> jd
-  page --> cta
-  page --> status
-```
-
-### Interview Flow
-
-```mermaid
-flowchart LR
-  shell["Interview Screen"]
-  progress["Progress Banner"]
-  context["Assessment Context Panel"]
-  overlap["Overlap Skills"]
-  gaps["Target Gaps"]
-  chat["Live Interview Panel"]
-  prompt["AI Question"]
-  answer["Candidate Answer"]
-  score["Evaluation Loop"]
-
-  shell --> progress
-  shell --> context
-  shell --> chat
-  context --> overlap
-  context --> gaps
-  chat --> prompt
-  chat --> answer
-  answer --> score
-```
-
-### Results Dashboard
-
-```mermaid
-flowchart TB
-  results["Results Screen"]
-  readiness["Readiness Score"]
-  radar["Skill Radar Chart"]
-  integrity["Profile Integrity Card"]
-  learning["Learning Plan"]
-  resources["Recommended Resources"]
-
-  results --> readiness
-  results --> radar
-  results --> integrity
-  results --> learning
-  learning --> resources
-```
-
-## Project Structure
-
+## 📁 Project Structure
 ```text
 src/
   app/
     api/
-      parse/       # resume parsing + skill extraction
-      interview/   # question generation
-      evaluate/    # answer scoring
-      result/      # readiness + learning plan
-    page.tsx       # main UI flow
-    globals.css    # visual system
+      apply/       # candidate registration & assessment submissions
+      campaigns/   # campaign creation, retrieval, and candidates list
+      parse/       # lightweight JS resume parsing
+      interview/   # technical question generators
+      evaluate/    # answer scoring & bluff checks
+      result/      # final learning plan synthesis
+    apply/[id]/    # public candidate shared landing page
+    recruiter/     # protected recruiter campaign dashboard
+    login/         # OTP login screen
+    page.tsx       # SaaS root landing page
+    globals.css    # Linear-style visual system
   components/
-    ui/            # shadcn/ui primitives
+    VoiceScreen.tsx # WebSocket audio streaming controller
   lib/
-    ai.ts          # Gemini/OpenAI-compatible client config
-    prompts.ts     # prompts + JSON schemas
+    db.ts          # Supabase client helper
+    ai.ts          # OpenRouter API client
+    prompts.ts     # prompt guidelines & schemas
 ```
 
-## Architecture Diagram
+---
 
-```mermaid
-flowchart LR
-  user["User"]
-  ui["Next.js App Router UI"]
-  parse["POST /api/parse"]
-  interview["POST /api/interview"]
-  evaluate["POST /api/evaluate"]
-  result["POST /api/result"]
-  pdf["PDF Parser"]
-  prompts["Prompt + Schema Layer"]
-  ai["Gemini API"]
+## ⚙️ Local Setup
 
-  user --> ui
-  ui --> parse
-  ui --> interview
-  ui --> evaluate
-  ui --> result
+### 1. Configure Environment
+Create a `.env.local` file in your root folder:
+```bash
+# AI & Email Keys
+GEMINI_API_KEY=your_gemini_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+RESEND_API_KEY=your_resend_api_key_or_blank_for_dev_mode
 
-  parse --> pdf
-  parse --> prompts
-  interview --> prompts
-  evaluate --> prompts
-  result --> prompts
-
-  parse --> ai
-  interview --> ai
-  evaluate --> ai
-  result --> ai
+# Supabase Credentials
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-secret
 ```
 
-## Local Setup
+### 2. Supabase Tables Setup
+Execute the following SQL queries inside your Supabase project's **SQL Editor**:
+```sql
+-- Campaigns Table
+create table campaigns (
+  id uuid default gen_random_uuid() primary key,
+  company_name text not null,
+  job_title text not null,
+  jd text not null,
+  skills_required text not null,
+  eligibility text not null,
+  recruiter_email text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
-### 1. Install dependencies
+-- Candidates Table
+create table candidates (
+  id uuid default gen_random_uuid() primary key,
+  campaign_id uuid references campaigns(id) on delete cascade not null,
+  name text not null,
+  email text not null,
+  resume_text text not null,
+  profile_links text not null,
+  profile_insights text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
 
+-- Assessments Table
+create table assessments (
+  id uuid default gen_random_uuid() primary key,
+  candidate_id uuid references candidates(id) on delete cascade unique not null,
+  scores text not null,
+  bluffs text not null,
+  readiness_score integer not null,
+  feedback text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+```
+
+### 3. Run Locally
+Install dependencies and start the development hot-reloading server:
 ```bash
 npm install
-```
-
-### 2. Configure environment
-
-Create `.env.local`:
-
-```bash
-GEMINI_API_KEY=your_google_ai_studio_key
-```
-
-Optional overrides:
-
-```bash
-GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
-GEMINI_FAST_MODEL=gemini-3-flash-preview
-GEMINI_SMART_MODEL=gemini-3-flash-preview
-```
-
-## Run Locally
-
-```bash
 npm run dev
 ```
 
-App URL:
-
-```bash
-http://localhost:8000
-```
-
-## Validation
-
-```bash
-npm run lint
-npx next build --webpack
-```
-
-## API Endpoints
-
-- `POST /api/parse`
-  Accepts `FormData` with resume PDF and job description, extracts text from the PDF, and returns skill overlap/gaps.
-
-- `POST /api/interview`
-  Generates a targeted technical question for a selected skill.
-
-- `POST /api/evaluate`
-  Scores the candidate answer and flags likely bluffing.
-
-- `POST /api/result`
-  Produces a final readiness score and a tailored learning plan.
-
-## Why This Project
-
-Most screening flows reward keyword stuffing. This project is built to validate practical skill depth instead of just matching buzzwords on a resume.
-
-## Notes
-
-- The app is currently configured for Gemini-first usage.
-- The AI client supports an OpenAI-compatible interface, but Gemini is the default provider in this repo.
-- The dev server runs on port `8000`.
+The application will launch on **`http://localhost:3001`**.
+- Go to `/recruiter` to set up campaigns and grab share links.
+- Paste the Campaign UUID as the **Job Code** on the homepage to start an interview.
