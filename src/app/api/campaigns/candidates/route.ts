@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db } from "@/backend/db";
 import { memoryCandidates } from "../../apply/route";
 import { memoryAssessments } from "../../apply/assessment/route";
 

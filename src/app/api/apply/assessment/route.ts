@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db } from "@/backend/db";
 
 // In-memory fallback database for local-only testing
 export let memoryAssessments: any[] = [];

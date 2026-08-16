@@ -12,10 +12,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/frontend/components/ui/button";
+import { Input } from "@/frontend/components/ui/input";
+import { Card, CardContent } from "@/frontend/components/ui/card";
+import { Badge } from "@/frontend/components/ui/badge";
 import {
   Sparkles,
   Users,

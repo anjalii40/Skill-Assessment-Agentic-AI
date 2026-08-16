@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { aiClient, FAST_MODEL } from '@/lib/ai';
-import { Prompts, Schemas } from '@/lib/prompts';
-import { safeParseJson } from '@/lib/utils';
+import { aiClient, FAST_MODEL } from '@/backend/ai';
+import { Prompts, Schemas } from '@/backend/prompts';
+import { safeParseJson } from '@/frontend/utils';
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) {

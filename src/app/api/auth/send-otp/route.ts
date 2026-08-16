@@ -8,7 +8,7 @@
 
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { saveOtp } from "@/lib/otp-store";
+import { saveOtp } from "@/backend/otp-store";
 
 // Instantiate the Resend client using our environment variable
 const resendApiKey = process.env.RESEND_API_KEY;

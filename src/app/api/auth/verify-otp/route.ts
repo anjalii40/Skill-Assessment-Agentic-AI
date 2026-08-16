@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { verifyOtp } from "@/lib/otp-store";
+import { verifyOtp } from "@/backend/otp-store";
 
 export async function POST(request: Request) {
   try {

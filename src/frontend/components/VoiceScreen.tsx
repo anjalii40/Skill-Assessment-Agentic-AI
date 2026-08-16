@@ -12,8 +12,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/frontend/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/frontend/components/ui/card";
 import { Loader2, Mic, MicOff, Volume2, ShieldAlert, Sparkles, LogOut } from "lucide-react";
 
 interface VoiceScreenProps {

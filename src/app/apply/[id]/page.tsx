@@ -12,13 +12,13 @@
 "use client";
 
 import { useEffect, useRef, useState, use } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
-import VoiceScreen from "@/components/VoiceScreen";
+import { Badge } from "@/frontend/components/ui/badge";
+import { Button } from "@/frontend/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/frontend/components/ui/card";
+import { Input } from "@/frontend/components/ui/input";
+import { Label } from "@/frontend/components/ui/label";
+import { Progress } from "@/frontend/components/ui/progress";
+import VoiceScreen from "@/frontend/components/VoiceScreen";
 import {
   ArrowRight,
   BrainCircuit,
